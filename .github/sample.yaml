@@ -1,0 +1,25 @@
+name: Sample workflow
+
+on:
+ workflow_dispatch:
+  inputs:
+   DeployTag:
+    description: 'Person to greet'
+    required: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get commit ID from main
+        run: echo "COMMIT_ID=$(git rev-parse --short=5 --verify HEAD)" >> $GITHUB_ENV
+
+      - name: Set DeployTag if not provided
+        run: echo "DeployTag=${{ inputs.DeployTag || env.COMMIT_ID }}" >> $GITHUB_ENV
+
+      - name: Print DeployTag
+        run: echo DeployTag ${{ env.DeployTag }}
