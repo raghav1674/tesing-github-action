@@ -7,9 +7,12 @@ on:
     description: 'Person to greet'
     required: false
 
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SomeTag: ${{ inputs.DeployTag || github.sha.substring(0, 5) }}
   
     steps:
       - name: Checkout repository
@@ -21,5 +24,9 @@ jobs:
       - name: Set DeployTag if not provided
         run: echo "DeployTag=${{ inputs.DeployTag || env.COMMIT_ID }}" >> $GITHUB_ENV
 
-      - name: Print DeployTag
+      - name: Show DeployTag
         run: echo DeployTag ${{ env.DeployTag }}
+
+      - name: Show SomeTag
+        run: echo SomeTag ${{ env.SomeTag }}
+
